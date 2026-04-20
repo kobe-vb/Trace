@@ -15,14 +15,11 @@ export default function InitPage() {
         setLoading(true);
 
         try {
-            await api.post("/register", {
-                station_name: name,
-            });
+            await api.post("/game/add_station", name);
 
             navigate(`/scan?station=${encodeURIComponent(name)}`);
         } catch (err) {
             console.error(err);
-            navigate(`/scan?station=${encodeURIComponent(name)}`);
         }
         finally {
             setLoading(false);

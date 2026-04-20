@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import jsQR from "jsqr";
 
-type ScanState = "idle" | "scanning" | "loading" | "success" | "error";
+export type ScanState = "idle" | "scanning" | "loading" | "success" | "error";
 
 export function useQrScanner(onScan: (data: string) => Promise<void>) {
     const videoRef = useRef<HTMLVideoElement | null>(null);
