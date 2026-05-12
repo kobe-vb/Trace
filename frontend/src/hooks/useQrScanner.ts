@@ -49,7 +49,52 @@ export function useQrScanner(onScan: (data: string) => Promise<void>) {
         setState("idle");
     };
 
+    const normalizeQr = (input: string): string | null => {
+        if (!input) return null;
+
+        // 1. harde cleanup
+        let cleaned = input
+            .replace(/\x00/g, "")     // null bytes weg
+            .trim();
+
+        if (!cleaned) return null;
+
+        // 2. detecteer URL
+        const isUrl = cleaned.startsWith("http://") || cleaned.startsWith("https://");
+
+        if (!isUrl) {
+            // plain code → basic validatie
+            return cleaned;
+        }
+
+        // 3. parse URL veilig
+        try {
+            const url = new URL(cleaned);
+
+            const surv = url.searchParams.get("surv_cd");
+
+            if (!surv) {
+                // geen bruikbare code → expliciet falen
+                return null;
+            }
+
+            // 4. extra cleanup op extracted waarde
+            const normalized = surv.replace(/\x00/g, "").trim();
+
+            // 5. optionele validatie (aan te raden)
+            const isValid = /^[A-Z0-9-]+$/.test(normalized);
+
+            return isValid ? normalized : null;
+
+        } catch {
+            // kapotte URL → niet bruikbaar
+            return null;
+        }
+    }
+
     const scanLoop = async () => {
+
+        setState("scanning");
 
         if (!scanEnabled.current) return;
 
@@ -77,10 +122,18 @@ export function useQrScanner(onScan: (data: string) => Promise<void>) {
         if (code) {
             scanEnabled.current = false;
             setState("loading");
+            const normalized = normalizeQr(code.data);
+
+            if (!normalized) {
+                setError("Scan fout");
+                setState("error");
+                return;
+            }
 
             try {
-                await onScan(code.data);
+                await onScan(normalized);
                 setState("success");
+                setTimeout(startScanning, 1000);
             } catch (err: any) {
                 setError(err?.message || "Scan fout");
                 setState("error");

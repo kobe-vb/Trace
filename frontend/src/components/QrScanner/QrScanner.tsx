@@ -71,7 +71,6 @@ export function QrScanner({
           <Box
             className={`${classes.feedbackOverlay} ${classes.error}`}
             onClick={() => {
-              scanner.setState("scanning");
               scanner.startScanning();
             }}
           >

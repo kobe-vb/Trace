@@ -11,8 +11,9 @@ export default function ScanPage() {
     const name = params.get("station") ?? "unknown";
 
     async function handleScan(qr: string) {
-        const response: any = await api.post("/scan", { qr_code: qr });
-        navigate(response.redirect);
+        const redirect: any = await api.get("/game/get_redirect_url/" + qr + "/" + name);
+        console.log(redirect);
+        navigate(redirect);
     }
 
     return (

@@ -1,4 +1,3 @@
-// frontend/src/pages/HomePage.tsx
 import { Container, Stack, Button, Title } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 

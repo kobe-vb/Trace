@@ -1,4 +1,6 @@
-from fastapi import FastAPI
+import asyncio
+
+from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -8,9 +10,10 @@ from app.api.routes import api_router
 
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
+from app.api.routes.game import lifespan
 
 
-app = FastAPI(title="imposter")
+app = FastAPI(title="imposter", lifespan=lifespan)
 
 
 origins = [
@@ -19,7 +22,9 @@ origins = [
     "http://192.168.68.112:8000",
     "http://192.168.184.13:5173",
     "http://192.168.185.235:5173",
-    "http://192.168.188.83:5173"
+    "http://192.168.188.83:5173",
+    "http://192.168.191.147:5173",
+    "https://1bdf-91-181-120-70.ngrok-free.app"
 ]
 
 app.add_middleware(
@@ -97,6 +102,21 @@ def get_local_ip():
 
 @app.on_event("startup")
 async def startup_event():
-    ip = get_local_ip()
+    # ip = get_local_ip()
     print(f"➡ Local:   http://localhost:8000")
-    print(f"➡ Network: http://{ip}:8000")
+    # print(f"➡ Network: http://{ip}:8000")
+   
+
+from app.services.Logger import broker 
+
+@app.websocket("/ws/admin")
+async def admin_ws(ws: WebSocket):
+    await broker.connect(ws)
+    try:
+        while True:
+            await ws.receive_text()  # keep alive (optional ping/pong)
+    except Exception:
+        pass
+    finally:
+        await broker.disconnect(ws)
+        

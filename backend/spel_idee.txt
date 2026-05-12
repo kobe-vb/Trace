@@ -1,0 +1,52 @@
+spel ideeen:
+
++ master mind dus tips met rood staat voor ... geel staat op plek ...
++ morse: ze krijgden eerst leeters, en de code is dan een woord
++ sqiet game glas gedoe: tips zij 1 links, racht 4, 5 links, ...
+- mijne veld, tips waar geen bomen zijn
++ gewoon de som: tips zijn al de getallen 10, 6, -7, 20
+
+ho let ook op de tijd dat ge de tip krijgt,
+
++ gewoon pincode, ge krijgd numers en leters, in de juiste volgorde
++ pincode met patronn zo da hutje van tibo, de tips zijn de cordinate in volgorde
++ Weegschaal – "A is zwaarder dan B", "C en D zijn gelijk" → rangschik de symbolen in volgorde
+
+- Battleship light – jij hebt rijen, partner heeft kolommen, samen vinden jullie de coördinaten ga nog moeijker ook op tijd, ma parten apart
+
++ op locatsie, tips is: code hant op in de ...
+
+
+Het Spel
+Iedereen scant bij aankomst hun QR-code. De server weet nu wie meedoet.
+Doel: als eerste 10 codes oplossen.
+
+Per ronde
+Je bezoekt 4 stations (gsm's/tablets). Elk station vertelt je welk station je daarna moet bezoeken — zo verdeelt de server de load en blijft iedereen bewegen.
+Op elk station krijg je één van twee dingen:
+
+Een tip — informatie die je nodig hebt om de code op te lossen
+Een kenmerk — een actie die je moet uitvoeren zodat je partner je herkent, bv. "loop achterwaarts", "doe de macarena", "leg je hand op je hoofd"
+
+Je krijgt 3 tips en 1 kenmerk per ronde. Het kenmerk kan vroeg of laat komen, dat beslist de server op basis van wanneer er een partner beschikbaar is.
+
+Partner vinden
+Jij voert de actie uit, je partner zoekt iemand die die actie doet. Zodra jullie elkaar bevestigen, delen jullie jullie tips. Jullie hebben samen 6 tips.
+
+Code oplossen
+Pas als je alle 3 tips hebt én je partner gevonden hebt, kun je de code invullen. Elke ronde is de code anders van type:
+
++ Som van de getallen
+- Morse-code decoderen
+- Weegschaal in balans
++ Squid Game brug
+- Mijnenveld
+
+Je weet tijdens het ophalen van je tips nog niet welk speltype het wordt. Schrijf alles op papier want de app toont tips niet opnieuw.
+Fout? Je moet naar een ander station gaan om opnieuw te proberen. Je tips blijven geldig, maar je verliest tijd. Je kunt ook kiezen om je 3 tips opnieuw op te halen — maar dat kost nog meer tijd.
+Juist? Volgende ronde, nieuwe partner, nieuw speltype.
+
+De eerste 2 spelers die alle 10 rondes voltooien winnen.
+
+techstack:
+Mantine + react + fast api + ngork
