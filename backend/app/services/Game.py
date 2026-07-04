@@ -20,6 +20,7 @@ class Game:
         self.players: dict[str, Player] = {}
         self.pairing = PairingService()
         self.stations = StationService()
+        self.mode: str = "classic"  # "classic" of "groupQuiz"
                 
     @locked
     async def add_station(self, station: str):
@@ -38,10 +39,18 @@ class Game:
         return self.players[player_name].round.code
 
     @locked
-    async def set_players(self, participants: list[Participant]):
+    async def set_players(self, participants: list[Participant], mode: str = "classic"):
+        self._reset_game()
+        self.mode = mode
         for participant in participants:
-            self.players[participant.id] = Player(participant.name)
+            self.players[participant.id] = Player(participant.name, mode=mode)
         self._start_game()
+    
+    def _reset_game(self):
+        self.players.clear()
+        self.pairing = PairingService()
+        self.stations.clear()
+        self.mode = "classic"
 
     def _start_game(self):
         for id in self.players.keys():
@@ -64,6 +73,8 @@ class Game:
 
     @locked
     async def get_redirect_url(self, player_id: str, station: str) -> str:
+        
+        
         if not self.stations.is_player_at_station(player_id, station):
             return f"/error?station={station}"
 
@@ -82,9 +93,10 @@ class Game:
         player: Player = self.players[player_id]
         partner_id: str | None = player.previous_partners[-1] if player.previous_partners else None
         
+        has_partner: bool = player.has_partner
         self.pairing.add_to_queue(player_id, self.players)
         
-        if not player.has_partner or not partner_id:
+        if not has_partner or not partner_id:
             return
         self.pairing.add_to_queue(partner_id, self.players)
         
@@ -112,3 +124,10 @@ class Game:
         partner_id = player.previous_partners[-1]
         partner = self.players[partner_id]
         partner.reset_tips()
+
+    @locked
+    async def verify_partner(self, player_id: str, scanned_id: str) -> bool:
+        player = self.players.get(player_id)
+        if not player or not player.previous_partners:
+            return False
+        return player.previous_partners[-1] == scanned_id

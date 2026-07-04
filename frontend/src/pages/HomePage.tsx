@@ -12,9 +12,9 @@ export default function HomePage() {
                 <Button
                     fullWidth
                     size="lg"
-                    onClick={() => navigate("/load")}
+                    onClick={() => navigate("/setup")}
                 >
-                    scan players
+                    Spel starten
                 </Button>
 
                 <Button

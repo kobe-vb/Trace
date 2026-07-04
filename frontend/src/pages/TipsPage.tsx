@@ -12,7 +12,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { api } from "../api/api";
 
-const TOTAL_SECONDS = 10;
+const TOTAL_SECONDS = 15;
 
 export default function TipsPage() {
     const navigate = useNavigate();
@@ -99,17 +99,7 @@ export default function TipsPage() {
             <Paper withBorder shadow="md" radius="lg" p="xl">
                 <Stack gap="lg" align="center">
 
-                    <Title order={2}>
-                        Station info
-                    </Title>
-
-                    <Text size="lg" c="dimmed">
-                        Ronde {round}
-                    </Text>
-
-                    <Text fw={700} size="lg">
-                        {formatTime(now)}
-                    </Text>
+                    <Title order={1}>Ronde {round}</Title>
 
                     {loading ? (
                         <Stack align="center">
@@ -118,8 +108,12 @@ export default function TipsPage() {
                         </Stack>
                     ) : (
                         <>
-                            <Text ta="center" c="dimmed">
+                            <Text ta="center">
                                 Volgende station: <b>{nextStation}</b>
+                            </Text>
+
+                            <Text fw={600} size="lg">
+                                {formatTime(now)}
                             </Text>
 
                             <Paper withBorder radius="md" p="md" w="100%">

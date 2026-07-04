@@ -3,28 +3,36 @@ from datetime import datetime
 import random
 from typing import TYPE_CHECKING
 
-from app.services.rounds import get_all_rounds
+from app.services.rounds import get_all_rounds, get_groupQuiz_rounds
 
 if TYPE_CHECKING:
     from app.services.rounds.Round import Round
 
 
 class Player:
-    def __init__(self, name: str):
+    def __init__(self, name: str, mode: str = "classic"):
         self.name: str = name
+        self.mode: str = mode  # "classic" of "groupQuiz"
 
         self.previous_partners: list[str] = []
         self.has_partner: bool = False
         
-        self.tip_index: int = -1
+        self.tip_index: int = 0
+        self.has_character: bool = False
         
-        self.possible_rounds: list[type[Round]] = get_all_rounds().copy()
+        self.possible_rounds: list[type[Round]] = self._load_rounds()
         self.round: Round | None = None
         self.round_index: int = 0
         self.round_started_at = datetime.now()
-    
+
+    def _load_rounds(self) -> list:
+        if self.mode == "groupQuiz":
+            return get_groupQuiz_rounds().copy()
+        return get_all_rounds().copy()
+
     def reset_tips(self):
-        self.tip_index = -1
+        self.tip_index = 0
+        self.has_character = False
         if self.round:
             self.round.reset_tips()
     
@@ -36,7 +44,7 @@ class Player:
         self._next_round()
         
         if not self.possible_rounds:
-            self.possible_rounds = get_all_rounds().copy()
+            self.possible_rounds = self._load_rounds()
         
         round_class = random.choice(self.possible_rounds)
         self.round = round_class(character)
@@ -46,18 +54,18 @@ class Player:
     def set_round(self, round: Round):
         self._next_round()
         self.round = round
-        # print(self.possible_rounds, round.__class__)
         if round.__class__ in self.possible_rounds:
             self.possible_rounds.remove(round.__class__)
     
     def _next_round(self):
         self.round_index += 1
-        self.tip_index = -1
+        self.tip_index = 0
+        self.has_character = False
         self.round_started_at = datetime.now()
 
     def get_tip(self) -> str:
-        if self.tip_index == -1:
-            self.tip_index += 1
+        if not self.has_character:
+            self.has_character = True
             return self.round.character
 
         tip = self.round.get_tip()
@@ -65,4 +73,11 @@ class Player:
         return tip
 
     def have_all_tips(self) -> bool:
-        return self.tip_index >= 3
+        
+        if not self.round:
+            return False
+        if self.round.out_of_tips:
+            return True
+        if self.tip_index >= ((len(self.round.tips) // 2) + (len(self.round.tips) % 2)): # half of the tips
+            return True
+        return False

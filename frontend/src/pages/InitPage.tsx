@@ -4,7 +4,7 @@ import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
 
 export default function InitPage() {
-    const [name, setName] = useState("");
+    const [name, setName] = useState("station 1");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 

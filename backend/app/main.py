@@ -1,4 +1,3 @@
-import asyncio
 
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,23 +7,16 @@ from pathlib import Path
 
 from app.api.routes import api_router
 
-from fastapi.exceptions import RequestValidationError
-from starlette.exceptions import HTTPException as StarletteHTTPException
 from app.api.routes.game import lifespan
 
 
-app = FastAPI(title="imposter", lifespan=lifespan)
+app = FastAPI(title="trace", lifespan=lifespan)
 
 
 origins = [
-    "http://localhost:5173",  # Vite dev server
     "http://192.168.68.112:5173",
-    "http://192.168.68.112:8000",
-    "http://192.168.184.13:5173",
-    "http://192.168.185.235:5173",
-    "http://192.168.188.83:5173",
-    "http://192.168.191.147:5173",
-    "https://1bdf-91-181-120-70.ngrok-free.app"
+    "http://localhost:5173",
+    "https://c012-91-181-120-70.ngrok-free.app"
 ]
 
 app.add_middleware(

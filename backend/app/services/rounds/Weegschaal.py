@@ -203,6 +203,7 @@ class Weegschaal(Round):
         right = code.split(" = ")[1].split(",")
         left_weight = sum(self.weights[name] for name in left)
         right_weight = sum(self.weights[name] for name in right)
+        print(f"left: {left}, left_weight: {left_weight}, right: {right}, right_weight: {right_weight}, self.weights: {self.weights}")
         return left_weight == right_weight
 
 

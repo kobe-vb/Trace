@@ -21,7 +21,14 @@ class Round:
         tip = self.tips[self._tip_index]
         self._tip_index += 1
         return tip
+    
+    @property
+    def out_of_tips(self) -> bool:
+        return self._tip_index >= len(self.tips)
+
+    def get_character(self) -> str:
+        return self.character
 
     def is_correct_code(self, code: str) -> bool:
-        print(f"tips: {self.tips}, code: {code}, expected: {self.code}")
+        # print(f"tips: {self.tips}, code: {code}, expected: {self.code}")
         return self.code == code

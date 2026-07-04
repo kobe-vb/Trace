@@ -23,7 +23,7 @@ interface Participant {
 export default function LoadPage() {
     const navigate = useNavigate();
 
-    const [participants, setParticipants] = useState<Participant[]>([]);
+    const [participants, setParticipants] = useState<Participant[]>([{ id: "1", name: "kobe" }, { id: "2", name: "ilsy" }]);
     const [loading, setLoading] = useState(false);
 
     const handleScan = useCallback((qr: string) => {
@@ -51,7 +51,8 @@ export default function LoadPage() {
         try {
             setLoading(true);
 
-            await api.post("/game/set_players", participants);
+            const mode = sessionStorage.getItem("game_mode") ?? "classic";
+            await api.post(`/game/set_players?mode=${mode}`, participants);
 
             navigate("/init");
         } catch (err) {

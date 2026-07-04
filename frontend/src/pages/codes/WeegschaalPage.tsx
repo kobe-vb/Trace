@@ -66,7 +66,6 @@ export default function WeegschaalPage() {
     const { submitCode, loading } = useCodeSubmit();
 
     const player = searchParams.get("player") ?? "";
-    const station = searchParams.get("station") ?? "";
 
     const [phase, setPhase] = useState<"loading" | "playing" | "done">("loading");
     const [instances, setInstances] = useState<ObjectInstance[]>([]);

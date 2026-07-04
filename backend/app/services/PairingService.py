@@ -21,15 +21,15 @@ class PairingService:
         partner_name = self._find_partner(player_id, players)
 
         if partner_name:
-            print(f"Pairing {player_id} with {partner_name}")
             self.queue.remove(partner_name)
+            print(f"{player_id}: Found partner {partner_name}\t Queue is now: {self.queue}")
             self._do_pairing(player_id, partner_name, players)
             return partner_name
 
         # Geen partner gevonden → in queue, maak eigen round aan
         if player_id not in self.queue:
             self.queue.append(player_id)
-        print(f"No partner found for {player_id} - adding to queue. Queue is now: {self.queue}")
+        print(f"{player_id}: no partner found.\t Queue is now: {self.queue}")
         players[player_id].start_new_round(self.characters.get_random_character())
         return None
 
@@ -43,6 +43,9 @@ class PairingService:
                 return candidate
             if candidate not in player.previous_partners:
                 return candidate
+        
+        if len(self.queue) >= len(players) / 2:
+            return self.queue[0]  # fallback: pair with first in queue
 
         return None
     

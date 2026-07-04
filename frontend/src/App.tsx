@@ -17,6 +17,8 @@ import WeegschaalPage from "./pages/codes/WeegschaalPage";
 import MorseCodePage from "./pages/codes/MorseCodePage";
 import RankingPage from "./pages/RankingPage";
 import WinPage from "./pages/WiningPage";
+import SetupPage from "./pages/SetupPage";
+import GroupQuizPage from "./pages/codes/GroupQuizPage";
 
 function App() {
   return (
@@ -26,6 +28,7 @@ function App() {
         <Route path="/admin" element={<AdminLogsPage />} />
 
         <Route path="/" element={<HomePage />} />
+        <Route path="/setup" element={<SetupPage />} />
         <Route path="/load" element={<LoadPage />} />
         <Route path="/init" element={<InitPage />} />
         <Route path="/ranking" element={<RankingPage />} />
@@ -46,6 +49,7 @@ function App() {
           <Route path="glazen-brug" element={<GlazenBrugPage  />} />
           <Route path="weegschaal" element={<WeegschaalPage  />} />
           <Route path="morse" element={<MorseCodePage  />} />
+          <Route path="groupQuiz" element={<GroupQuizPage />} />
         </Route>
 
         {/* fallback */}

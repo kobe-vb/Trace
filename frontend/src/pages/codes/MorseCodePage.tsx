@@ -102,7 +102,6 @@ export default function MorseCodePage() {
     const [code, setCode] = useState("");
     const [answer, setAnswer] = useState("");
     const [flash, setFlash] = useState(false);
-    const [playCount, setPlayCount] = useState(0);
 
     const audioCtxRef = useRef<AudioContext | null>(null);
     const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -135,7 +134,6 @@ export default function MorseCodePage() {
         if (phase === "playing") return;
         clearAll();
         setPhase("playing");
-        setPlayCount((n) => n + 1);
 
         if (!audioCtxRef.current) {
             audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();

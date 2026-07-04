@@ -12,4 +12,4 @@ class Test(Round):
             self.tips.append(f"tip {i + 1}")
     
     def is_correct_code(self, code: str) -> bool:
-        return True
+        return code == "test"

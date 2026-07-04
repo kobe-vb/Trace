@@ -4,9 +4,15 @@ import random
 class StationService:
     def __init__(self):
         self.stations: dict[str, list[str]] = {}
+    
+    def clear(self):
+        
+        for station in self.stations:
+            self.stations[station].clear()
 
     def add_station(self, station: str):
-        self.stations[station] = []
+        if station not in self.stations:
+            self.stations[station] = []
 
     def move_player_to_next_station(self, player_id: str):
         current_station: str = self._remove_player_from_current_station(player_id)
