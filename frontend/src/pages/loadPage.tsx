@@ -26,14 +26,14 @@ export default function LoadPage() {
     const [participants, setParticipants] = useState<Participant[]>([{ id: "1", name: "kobe" }, { id: "2", name: "ilsy" }]);
     const [loading, setLoading] = useState(false);
 
-    const handleScan = useCallback((qr: string) => {
+    async function handleScan(qr: string) {
         if (!qr) return;
 
         setParticipants((prev) => {
             if (prev.some((p) => p.id === qr)) return prev;
             return [{ id: qr, name: "" }, ...prev];
         });
-    }, []);
+    };
 
     const handleNameChange = useCallback((id: string, name: string) => {
         setParticipants((prev) =>

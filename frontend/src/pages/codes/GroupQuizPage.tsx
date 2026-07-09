@@ -1,5 +1,5 @@
 import { Stack, Text, Paper, Loader, Alert, Button } from "@mantine/core";
-import { IconAlertCircle, IconCheck } from "@tabler/icons-react";
+import { IconAlertCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useCodeSubmit } from "../../layouts/CodeLayout";

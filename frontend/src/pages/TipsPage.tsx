@@ -12,7 +12,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { api } from "../api/api";
 
-const TOTAL_SECONDS = 15;
+const TOTAL_SECONDS = 45;
 
 export default function TipsPage() {
     const navigate = useNavigate();
