@@ -65,7 +65,6 @@ export default function GroupQuizPage() {
                     onScan={handlePartnerScan}
                     title="Scan partner"
                     subtitle="Scan de QR code van jouw partner om verder te gaan"
-                    showManualInput
                 />
 
                 {error && (

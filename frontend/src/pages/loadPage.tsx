@@ -70,7 +70,6 @@ export default function LoadPage() {
                     onScan={handleScan}
                     title="Scan deelnemers"
                     subtitle="Scan meerdere QR codes"
-                    showManualInput
                 />
 
                 {/* List */}

@@ -23,7 +23,6 @@ export default function ScanPage() {
                     onScan={handleScan}
                     title={`Station ${name}`}
                     subtitle="Scan de QR code om verder te gaan"
-                    showManualInput
                 />
             </Stack>
         </Container>
