@@ -14,11 +14,11 @@ from app.services.rounds.GroupQuiz import GroupQuiz, ParticipantData
 async def lifespan(app: FastAPI):
     game = Game()
     
-    await game.add_station("station 1")
-    await game.add_station("station 2")
-    await game.add_station("station 3")
+    # await game.add_station("station 1")
+    # await game.add_station("station 2")
+    # await game.add_station("station 3")
     
-    await game.set_players([Participant(id="1", name="Player 1"), Participant(id="2", name="Player 2"), Participant(id="3", name="Player 3"), Participant(id="4", name="Player 4"), Participant(id="5", name="Player 5")], mode="classic")
+    # await game.set_players([Participant(id="1", name="Player 1"), Participant(id="2", name="Player 2"), Participant(id="3", name="Player 3"), Participant(id="4", name="Player 4"), Participant(id="5", name="Player 5")], mode="classic")
 
     app.state.game = game
     yield
@@ -41,7 +41,10 @@ async def set_players(payload: list[Participant], mode: str = "classic", game: G
 @router.post("/add_station")
 async def add_station(payload: str = Body(...), game: GameDep = None):
     await game.add_station(payload)
-
+    
+@router.post("/set_characters")
+async def set_characters(payload: list[str], game: GameDep = None):
+    await game.set_characters(payload)
 
 @router.get("/get_redirect_url/{player_id}/{station}")
 async def get_redirect_url(player_id: str, station: str, game: GameDep = None):

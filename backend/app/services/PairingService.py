@@ -12,6 +12,10 @@ class PairingService:
     def __init__(self):
         self.queue: list[str] = []
         self.characters: Characters = Characters()
+    
+    def clear(self):
+        self.queue.clear()
+        self.characters.clear()
 
     def add_to_queue(self, player_id: str, players: dict[str, Player]):
         """

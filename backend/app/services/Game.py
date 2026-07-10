@@ -46,9 +46,13 @@ class Game:
             self.players[participant.id] = Player(participant.name, mode=mode)
         self._start_game()
     
+    @locked
+    async def set_characters(self, characters: list[str]):
+        await self.pairing.characters.set_characters(characters)
+    
     def _reset_game(self):
         self.players.clear()
-        self.pairing = PairingService()
+        self.pairing.clear()
         self.stations.clear()
         self.mode = "classic"
 

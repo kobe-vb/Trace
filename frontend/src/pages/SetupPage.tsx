@@ -14,6 +14,10 @@ import {
 import { IconUpload, IconCheck, IconAlertCircle } from "@tabler/icons-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { TextInput, ActionIcon } from "@mantine/core";
+import { IconPlus, IconTrash } from "@tabler/icons-react";
+import { ScrollArea } from "@mantine/core";
+import { api } from "../api/api";
 
 type Mode = "classic" | "groupQuiz";
 
@@ -28,6 +32,39 @@ export default function SetupPage() {
     const [uploadResult, setUploadResult] = useState<UploadResult | null>(null);
     const [uploadError, setUploadError] = useState<string | null>(null);
     const [uploading, setUploading] = useState(false);
+    const [characterInput, setCharacterInput] = useState("");
+    const [characters, setCharacters] = useState<string[]>([
+        "wees ne pingwiung(zo die vogel in sneeuw)",
+"wees ne vogel",
+"wees ne kinker/kikker",
+"wees ne gorila/app",
+"wees ne olifanht",
+"draai af een toe rond uw eigen as",
+"moonwalk",
+"huppel",
+"lach overdreven fake",
+"begin uw zin met \"jow bro\"",
+"steek stiekem uw mideving op naar uw mede speleres",
+"geef iedeern high fives",
+"ga soms op uw knie zitte en bit tot de leiding",
+"wees een racewagen",
+"beschuldig random mensen van verraad",
+"probeer een wave te doen"
+    ]);
+
+    function addCharacter() {
+        const value = characterInput.trim();
+
+        if (!value) return;
+        if (characters.includes(value)) return;
+
+        setCharacters([...characters, value]);
+        setCharacterInput("");
+    }
+
+    function removeCharacter(name: string) {
+        setCharacters(characters.filter((c) => c !== name));
+    }
 
     async function handleFileUpload(file: File | null) {
         if (!file) return;
@@ -70,9 +107,13 @@ export default function SetupPage() {
         return true;
     }
 
-    function handleContinue() {
-        // Mode opslaan in sessionStorage zodat LoadPage het kan meegeven
+    async function handleContinue() {
         sessionStorage.setItem("game_mode", mode!);
+
+        api.post(`/game/set_characters`, characters).catch((err) => {
+            console.error("Failed to set characters", err);
+        });
+
         navigate("/load");
     }
 
@@ -82,6 +123,61 @@ export default function SetupPage() {
                 <Title order={2} ta="center">
                     Spel instellen
                 </Title>
+
+                <Card withBorder radius="xl" p="lg">
+                    <Stack gap="md">
+                        <Text fw={600}>Characters</Text>
+
+                        <Group align="end">
+                            <TextInput
+                                style={{ flex: 1 }}
+                                label="Nieuw character"
+                                placeholder="Typ een character..."
+                                value={characterInput}
+                                onChange={(e) => setCharacterInput(e.currentTarget.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") addCharacter();
+                                }}
+                            />
+
+                            <Button
+                                leftSection={<IconPlus size={16} />}
+                                onClick={addCharacter}
+                            >
+                                Toevoegen
+                            </Button>
+                        </Group>
+
+                        <Text fw={600}>al {characters.length} characters</Text>
+
+                        <ScrollArea h={300} scrollbarSize={8}>
+
+                        <Stack gap="xs">
+                            {[...characters].reverse().map((character) => (
+                                <Card key={character} withBorder p="xs">
+                                    <Group justify="space-between">
+                                        <Text>{character}</Text>
+
+                                        <ActionIcon
+                                            color="red"
+                                            variant="light"
+                                            onClick={() => removeCharacter(character)}
+                                        >
+                                            <IconTrash size={16} />
+                                        </ActionIcon>
+                                    </Group>
+                                </Card>
+                            ))}
+
+                            {characters.length === 0 && (
+                                <Text size="sm" c="dimmed">
+                                    Nog geen characters toegevoegd.
+                                </Text>
+                            )}
+                        </Stack>
+                        </ScrollArea>
+                    </Stack>
+                </Card>
 
                 {/* Modus keuze */}
                 <Card withBorder radius="xl" p="lg">
