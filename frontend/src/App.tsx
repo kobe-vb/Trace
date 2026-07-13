@@ -22,7 +22,7 @@ import GroupQuizPage from "./pages/codes/GroupQuizPage";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/quiz">
       <Routes>
 
         <Route path="/admin" element={<AdminLogsPage />} />
