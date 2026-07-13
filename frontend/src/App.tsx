@@ -19,6 +19,7 @@ import RankingPage from "./pages/RankingPage";
 import WinPage from "./pages/WiningPage";
 import SetupPage from "./pages/SetupPage";
 import GroupQuizPage from "./pages/codes/GroupQuizPage";
+import LeftGamePage from "./pages/LeftGamePage";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
         <Route path="/error" element={<ErrorPage />} />
         <Route path="/tips" element={<TipsPage />} />
         <Route path="/win" element={<WinPage />} />
+        <Route path="/left" element={<LeftGamePage />} />
 
         <Route path="/wrong_code" element={<WrongCodePage />} />
         <Route path="/next_round" element={<NextRoundPage />} />

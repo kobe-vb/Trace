@@ -24,6 +24,9 @@ class Player:
         self.round: Round | None = None
         self.round_index: int = 0
         self.round_started_at = datetime.now()
+        
+        self.left_game: bool = False
+        
 
     def _load_rounds(self) -> list:
         if self.mode == "groupQuiz":

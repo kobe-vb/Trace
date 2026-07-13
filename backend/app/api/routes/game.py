@@ -14,8 +14,8 @@ from app.services.rounds.GroupQuiz import GroupQuiz, ParticipantData
 async def lifespan(app: FastAPI):
     game = Game()
     
-    # await game.add_station("station 1")
-    # await game.add_station("station 2")
+    await game.add_station("station 1")
+    await game.add_station("station 2")
     # await game.add_station("station 3")
     
     # await game.set_players([Participant(id="1", name="Player 1"), Participant(id="2", name="Player 2"), Participant(id="3", name="Player 3"), Participant(id="4", name="Player 4"), Participant(id="5", name="Player 5")], mode="classic")
@@ -84,6 +84,9 @@ async def get_ranking(game: GameDep = None):
 async def reset_tips(player_id: str, game: GameDep = None):
     await game.reset_tips(player_id)
 
+@router.post("/leave/{player_id}")
+async def leave_game(player_id: str, game: GameDep = None):
+    await game.leave_game(player_id)
 
 @router.get("/verify_partner/{player_id}/{scanned_id}")
 async def verify_partner(player_id: str, scanned_id: str, game: GameDep = None):

@@ -11,6 +11,7 @@ import {
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { api } from "../api/api";
+import LeaveGameButton from "../components/LeaveGameButton";
 
 const TOTAL_SECONDS = 45;
 
@@ -143,6 +144,8 @@ export default function TipsPage() {
                             >
                                 Ga nu terug
                             </Button>
+
+                            <LeaveGameButton />
                         </>
                     )}
                 </Stack>

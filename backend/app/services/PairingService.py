@@ -16,12 +16,15 @@ class PairingService:
     def clear(self):
         self.queue.clear()
         self.characters.clear()
+    
 
-    def add_to_queue(self, player_id: str, players: dict[str, Player]):
-        """
-        Voeg speler toe aan queue en probeer meteen te pairen.
-        Returned de partner naam als er gepaired is, anders None.
-        """
+    def _add_to_queue(self, player_id: str, players: dict[str, Player], with_round: bool = True):
+
+        if players[player_id].left_game:
+            if player_id in self.queue:
+                self.queue.remove(player_id)
+            return None
+
         partner_name = self._find_partner(player_id, players)
 
         if partner_name:
@@ -34,14 +37,23 @@ class PairingService:
         if player_id not in self.queue:
             self.queue.append(player_id)
         print(f"{player_id}: no partner found.\t Queue is now: {self.queue}")
-        players[player_id].start_new_round(self.characters.get_random_character())
+        if with_round:
+            players[player_id].start_new_round(self.characters.get_random_character())
         return None
+
+    def add_to_queue(self, player_id: str, players: dict[str, Player]):
+        self._add_to_queue(player_id, players, with_round=True)
+
+    def add_lonly_player_to_queue(self, player_id: str, players: dict[str, Player]):
+        self._add_to_queue(player_id, players, with_round=False)
 
     def _find_partner(self, player_id: str, players: dict[str, Player]) -> str | None:
         player = players[player_id]
 
         for candidate in self.queue:
             if candidate == player_id:
+                continue
+            if players[candidate].left_game:
                 continue
             if players[candidate].tip_index >= 1:
                 return candidate

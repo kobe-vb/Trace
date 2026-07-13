@@ -17,7 +17,7 @@ export function QrScanner({
   onScan,
   title = "Scan QR",
   subtitle = "Hou de QR code binnen het kader",
-  showManualInput = false,
+  showManualInput = true,
 }: QrScannerProps) {
   const scanner = useQrScanner(onScan);
   const [manualCode, setManualCode] = useState("");

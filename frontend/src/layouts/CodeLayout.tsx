@@ -2,7 +2,8 @@ import { Container, Stack, Title, Badge, Text, Paper } from "@mantine/core";
 import { useEffect, useState, createContext, useContext } from "react";
 import { useNavigate, useSearchParams, Outlet } from "react-router-dom";
 import { api } from "../api/api";
-import ResetTipsButton from "../components/Resettipsbutton";
+import ResetTipsButton from "../components/ResetTipsButton";
+import LeaveGameButton from "../components/LeaveGameButton";
 
 interface CodeContextType {
   submitCode: (code: string) => Promise<void>;
@@ -90,6 +91,7 @@ export default function CodeLayout() {
             <Outlet />
           </CodeContext.Provider>
           <ResetTipsButton />
+          <LeaveGameButton />
         </Stack>
       </Paper>
     </Container>

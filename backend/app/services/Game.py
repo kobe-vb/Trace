@@ -78,19 +78,42 @@ class Game:
     @locked
     async def get_redirect_url(self, player_id: str, station: str) -> str:
         
-        
+        player = self.players[player_id]
+        if player.left_game:
+            return f"/left?station={station}&player_name={player.name}"
+
         if not self.stations.is_player_at_station(player_id, station):
             return f"/error?station={station}"
 
         self.stations.move_player_to_next_station(player_id)
-
-        player = self.players[player_id]
 
         if player.round_index >= 10:
             return f"/win?station={station}&player_name={player.name}"
         if player.have_all_tips():
             return f"/code/{player.round.url}?station={station}&player={player_id}"
         return f"/tips?station={station}&player={player_id}"
+
+    @locked
+    async def leave_game(self, player_id: str):
+
+        player = self.players.get(player_id)
+        if not player:
+            return
+        player.left_game = True
+        if player_id in self.pairing.queue:
+            self.pairing.queue.remove(player_id)
+        
+        if not player.has_partner:
+            return
+        
+        partner_id = player.previous_partners[-1]
+        partner = self.players.get(partner_id)
+        if not partner:
+            return
+        
+        partner.has_partner = False
+        self.pairing.add_lonly_player_to_queue(partner_id, self.players)
+            
 
     def _progress_to_next_round(self, player_id: str):
         
@@ -106,10 +129,18 @@ class Game:
         
     def get_ranking(self) -> list[Ranking]:
         ranking: list[Ranking] = []
-        for player in self.players.values():
+        for player_id, player in self.players.items():
+            
+            partner_id: str | None = player.previous_partners[-1] if player.previous_partners else None
+            partner_name: str | None = None
+            if partner_id and partner_id in self.players:
+                partner_name = self.players[partner_id].name
+                if not partner_name:
+                    partner_name = f"player:{partner_id}"
+            
             ranking.append(Ranking(
-            player_name=player.name,
-            partner_name=self.players[player.previous_partners[-1]].name if (player.previous_partners and player.has_partner) else None,
+            player_name=player.name if player.name else f"player:{player_id}",
+            partner_name=partner_name,
             player_character=player.round.character if player.round else "",
             rounds_completed=player.round_index,
             round_started_at=player.round_started_at
